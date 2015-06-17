@@ -1,6 +1,7 @@
 package chat;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
@@ -14,11 +15,16 @@ public class ConnectionServer implements Runnable {
 			Socket clientConnection = server.accept();
 
 			Scanner input = new Scanner(clientConnection.getInputStream());
+			PrintWriter out = new PrintWriter(clientConnection.getOutputStream(), true); 
+			
 			String chatMessage;
 			while (clientConnection.isConnected() && !clientConnection.isClosed()) {
 				chatMessage = input.nextLine();
-				System.out.println("server said: "+ chatMessage);
-
+				//System.out.println("server said: "+ chatMessage);
+				
+				// this sends chatMessage out to the client
+				out.println(chatMessage); 
+				
 				if (chatMessage.equals("exit")) {
 					clientConnection.close();
 					break;
@@ -30,15 +36,5 @@ public class ConnectionServer implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public static void main(String[] args) throws IOException {
-		Runnable server = new ConnectionServer();
-		Thread thread = new Thread(server);
-		//ChatFrame chat = new ChatFrame();
-		
-		thread.start();
-		
-		System.out.println("DONE");
 	}
 }
