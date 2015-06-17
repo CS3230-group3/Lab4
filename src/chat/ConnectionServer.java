@@ -16,8 +16,8 @@ public class ConnectionServer implements Runnable {
 			Scanner input = new Scanner(clientConnection.getInputStream());
 			String chatMessage;
 			while (clientConnection.isConnected() && !clientConnection.isClosed()) {
-				chatMessage = input.next();
-				System.out.println(chatMessage);
+				chatMessage = input.nextLine();
+				System.out.println("server said: "+ chatMessage);
 
 				if (chatMessage.equals("exit")) {
 					clientConnection.close();
@@ -35,6 +35,8 @@ public class ConnectionServer implements Runnable {
 	public static void main(String[] args) throws IOException {
 		Runnable server = new ConnectionServer();
 		Thread thread = new Thread(server);
+		//ChatFrame chat = new ChatFrame();
+		
 		thread.start();
 		
 		System.out.println("DONE");
